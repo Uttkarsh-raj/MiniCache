@@ -2,6 +2,7 @@ package handler
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/Uttkarsh-raj/redis-go/database"
 	"github.com/Uttkarsh-raj/redis-go/list"
@@ -25,7 +26,7 @@ func SetRequestHandler(request []string, newDb *database.Database) (any, error) 
 
 func GetRequestHandler(request []string, newDb *database.Database) (any, error) {
 	if len(request) < 2 {
-		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
+		return nil, errors.New("error: please follow the specified format <command> <key>")
 	}
 	var result []string
 	for i := 1; i < len(request); i++ {
@@ -43,7 +44,7 @@ func GetRequestHandler(request []string, newDb *database.Database) (any, error) 
 }
 
 func LpushRequestHandler(request []string, newList *list.CommandsList) (any, error) {
-	if len(request) < 2 {
+	if len(request) < 3 {
 		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
 	}
 	name := request[1]
@@ -62,7 +63,7 @@ func LpushRequestHandler(request []string, newList *list.CommandsList) (any, err
 }
 
 func RpushRequestHandler(request []string, newList *list.CommandsList) (any, error) {
-	if len(request) < 2 {
+	if len(request) < 3 {
 		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
 	}
 	name := request[1]
@@ -72,6 +73,22 @@ func RpushRequestHandler(request []string, newList *list.CommandsList) (any, err
 	} else {
 		newList.CreateList(name)
 		newList.RightPushInList(name, request[2:])
+	}
+	resp := gin.H{
+		"key":   request[1],
+		"value": newList.Store[name],
+	}
+	return resp, nil
+}
+
+func ListMembers(request []string, newList *list.CommandsList) (any, error) {
+	if len(request) < 2 {
+		return nil, errors.New("error: please follow the specified format <command> <key>")
+	}
+	name := request[1]
+	isPresent := newList.ListExists(name)
+	if !isPresent {
+		return nil, fmt.Errorf("error: Create a list of this key before trying to access it")
 	}
 	resp := gin.H{
 		"key":   request[1],

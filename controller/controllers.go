@@ -69,6 +69,15 @@ func HandleIncomingCommand(newDb *database.Database, commandList *list.CommandsL
 				}
 				c.JSON(handler.ResponseReformer(http.StatusOK, true, "", data))
 			}
+		case "LMEMBERS":
+			{
+				data, err := handler.ListMembers(commands, commandList)
+				if err != nil {
+					c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, err.Error(), ""))
+					return
+				}
+				c.JSON(handler.ResponseReformer(http.StatusOK, true, "", data))
+			}
 		default:
 			{
 				c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, "error: please follow the specified format <command> <key> <value> :"+err.Error(), ""))
