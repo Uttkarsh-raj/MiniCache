@@ -1,6 +1,8 @@
 package list
 
-import "sync"
+import (
+	"sync"
+)
 
 type List struct {
 	mutex sync.Mutex
@@ -55,7 +57,7 @@ func addToList(list *List, vals []string, lor string) {
 
 	if lor == "Left" {
 		list.List = append(vals, list.List...)
-	} else {
+	} else if lor == "Right" {
 		list.List = append(list.List, vals...)
 	}
 }

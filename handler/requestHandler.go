@@ -60,3 +60,22 @@ func LpushRequestHandler(request []string, newList *list.CommandsList) (any, err
 	}
 	return resp, nil
 }
+
+func RpushRequestHandler(request []string, newList *list.CommandsList) (any, error) {
+	if len(request) < 2 {
+		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
+	}
+	name := request[1]
+	isPresent := newList.ListExists(name)
+	if isPresent {
+		newList.RightPushInList(name, request[2:])
+	} else {
+		newList.CreateList(name)
+		newList.RightPushInList(name, request[2:])
+	}
+	resp := gin.H{
+		"key":   request[1],
+		"value": newList.Store[name],
+	}
+	return resp, nil
+}
