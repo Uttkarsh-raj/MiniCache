@@ -8,6 +8,7 @@ import (
 
 	"github.com/Uttkarsh-raj/redis-go/database"
 	"github.com/Uttkarsh-raj/redis-go/handler"
+	"github.com/Uttkarsh-raj/redis-go/list"
 	"github.com/Uttkarsh-raj/redis-go/model"
 	"github.com/gin-gonic/gin"
 )
@@ -18,7 +19,7 @@ func SendHelloMessage() gin.HandlerFunc {
 	}
 }
 
-func HandleIncomingCommand(newDb *database.Database) gin.HandlerFunc {
+func HandleIncomingCommand(newDb *database.Database, commandList *list.CommandsList) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), time.Second*100)
 		defer cancel()
@@ -44,6 +45,15 @@ func HandleIncomingCommand(newDb *database.Database) gin.HandlerFunc {
 		case "GET":
 			{
 				data, err := handler.GetRequestHandler(commands, newDb)
+				if err != nil {
+					c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, err.Error(), ""))
+					return
+				}
+				c.JSON(handler.ResponseReformer(http.StatusOK, true, "", data))
+			}
+		case "LPUSH":
+			{
+				data, err := handler.LpushRequestHandler(commands, commandList)
 				if err != nil {
 					c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, err.Error(), ""))
 					return

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	"github.com/Uttkarsh-raj/redis-go/database"
+	"github.com/Uttkarsh-raj/redis-go/list"
 	"github.com/gin-gonic/gin"
 )
 
@@ -21,6 +22,7 @@ func SetRequestHandler(request []string, newDb *database.Database) (any, error) 
 	}
 	return resp, nil
 }
+
 func GetRequestHandler(request []string, newDb *database.Database) (any, error) {
 	if len(request) < 2 {
 		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
@@ -36,6 +38,25 @@ func GetRequestHandler(request []string, newDb *database.Database) (any, error) 
 	resp := gin.H{
 		"key":   request[1:],
 		"value": result,
+	}
+	return resp, nil
+}
+
+func LpushRequestHandler(request []string, newList *list.CommandsList) (any, error) {
+	if len(request) < 2 {
+		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
+	}
+	name := request[1]
+	isPresent := newList.ListExists(name)
+	if isPresent {
+		newList.LeftPushInList(name, request[2:])
+	} else {
+		newList.CreateList(name)
+		newList.LeftPushInList(name, request[2:])
+	}
+	resp := gin.H{
+		"key":   request[1],
+		"value": newList.Store[name],
 	}
 	return resp, nil
 }
