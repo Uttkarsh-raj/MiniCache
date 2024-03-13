@@ -40,6 +40,8 @@ func HandleIncomingCommand(newDb *database.Database, commandList *list.CommandsL
 					c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, err.Error(), ""))
 					return
 				}
+				// here is the change
+				handler.StoreData(newDb)
 				c.JSON(handler.ResponseReformer(http.StatusOK, true, "", data))
 			}
 		case "GET":
