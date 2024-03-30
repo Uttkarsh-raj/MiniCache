@@ -8,7 +8,6 @@ import (
 
 	"github.com/Uttkarsh-raj/redis-go/database"
 	"github.com/Uttkarsh-raj/redis-go/handler"
-	"github.com/Uttkarsh-raj/redis-go/list"
 	"github.com/Uttkarsh-raj/redis-go/model"
 	"github.com/gin-gonic/gin"
 )
@@ -19,7 +18,7 @@ func SendHelloMessage() gin.HandlerFunc {
 	}
 }
 
-func HandleIncomingCommand(newDb *database.Database, commandList *list.CommandsList) gin.HandlerFunc {
+func HandleIncomingCommand(newDb *database.Database, commandList *model.CommandsList) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		_, cancel := context.WithTimeout(context.Background(), time.Second*100)
 		defer cancel()

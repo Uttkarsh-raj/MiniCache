@@ -24,7 +24,7 @@ func StoreData(db *database.Database) {
 }
 
 func Store(db *database.Database) {
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(filePath, os.O_RDWR|os.O_CREATE|os.O_TRUNC, 0755)
 	if err != nil {
 		fmt.Println("Error opening the file")
 	}

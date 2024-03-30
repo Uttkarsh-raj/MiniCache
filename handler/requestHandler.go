@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/Uttkarsh-raj/redis-go/database"
-	"github.com/Uttkarsh-raj/redis-go/list"
+	"github.com/Uttkarsh-raj/redis-go/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -43,7 +43,7 @@ func GetRequestHandler(request []string, newDb *database.Database) (any, error) 
 	return resp, nil
 }
 
-func LpushRequestHandler(request []string, newList *list.CommandsList) (any, error) {
+func LpushRequestHandler(request []string, newList *model.CommandsList) (any, error) {
 	if len(request) < 3 {
 		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
 	}
@@ -62,7 +62,7 @@ func LpushRequestHandler(request []string, newList *list.CommandsList) (any, err
 	return resp, nil
 }
 
-func RpushRequestHandler(request []string, newList *list.CommandsList) (any, error) {
+func RpushRequestHandler(request []string, newList *model.CommandsList) (any, error) {
 	if len(request) < 3 {
 		return nil, errors.New("error: please follow the specified format <command> <key> <value>")
 	}
@@ -81,18 +81,26 @@ func RpushRequestHandler(request []string, newList *list.CommandsList) (any, err
 	return resp, nil
 }
 
-func ListMembers(request []string, newList *list.CommandsList) (any, error) {
+func ListMembers(request []string, newList *model.CommandsList) (any, error) {
 	if len(request) < 2 {
 		return nil, errors.New("error: please follow the specified format <command> <key>")
 	}
 	name := request[1]
 	isPresent := newList.ListExists(name)
-	if !isPresent {
+	if !isPresent && name != "*" {
 		return nil, fmt.Errorf("error: Create a list of this key before trying to access it")
 	}
 	resp := gin.H{
 		"key":   request[1],
 		"value": newList.Store[name],
+	}
+	var response map[string]*model.List
+	if name == "*" {
+		response = newList.Store
+		resp = gin.H{
+			"key":   request[1],
+			"value": response,
+		}
 	}
 	return resp, nil
 }
