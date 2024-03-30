@@ -3,9 +3,9 @@ package main
 import (
 	"log"
 
-	"github.com/Uttkarsh-raj/redis-go/database"
-	"github.com/Uttkarsh-raj/redis-go/model"
-	"github.com/Uttkarsh-raj/redis-go/routes"
+	"github.com/Uttkarsh-raj/minicache/database"
+	"github.com/Uttkarsh-raj/minicache/model"
+	"github.com/Uttkarsh-raj/minicache/routes"
 	"github.com/gin-gonic/gin"
 )
 

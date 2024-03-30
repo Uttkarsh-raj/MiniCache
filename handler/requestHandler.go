@@ -4,8 +4,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/Uttkarsh-raj/redis-go/database"
-	"github.com/Uttkarsh-raj/redis-go/model"
+	"github.com/Uttkarsh-raj/minicache/database"
+	"github.com/Uttkarsh-raj/minicache/model"
 	"github.com/gin-gonic/gin"
 )
 

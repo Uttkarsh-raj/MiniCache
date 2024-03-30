@@ -1,9 +1,9 @@
 package routes
 
 import (
-	"github.com/Uttkarsh-raj/redis-go/controller"
-	"github.com/Uttkarsh-raj/redis-go/database"
-	"github.com/Uttkarsh-raj/redis-go/model"
+	"github.com/Uttkarsh-raj/minicache/controller"
+	"github.com/Uttkarsh-raj/minicache/database"
+	"github.com/Uttkarsh-raj/minicache/model"
 	"github.com/gin-gonic/gin"
 )
 

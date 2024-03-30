@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/Uttkarsh-raj/redis-go/database"
-	"github.com/Uttkarsh-raj/redis-go/handler"
-	"github.com/Uttkarsh-raj/redis-go/model"
+	"github.com/Uttkarsh-raj/minicache/database"
+	"github.com/Uttkarsh-raj/minicache/handler"
+	"github.com/Uttkarsh-raj/minicache/model"
 	"github.com/gin-gonic/gin"
 )
 
@@ -59,6 +59,7 @@ func HandleIncomingCommand(newDb *database.Database, commandList *model.Commands
 					c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, err.Error(), ""))
 					return
 				}
+				handler.StoreDataList(commandList)
 				c.JSON(handler.ResponseReformer(http.StatusOK, true, "", data))
 			}
 		case "RPUSH":
@@ -68,6 +69,7 @@ func HandleIncomingCommand(newDb *database.Database, commandList *model.Commands
 					c.JSON(handler.ResponseReformer(http.StatusBadRequest, false, err.Error(), ""))
 					return
 				}
+				handler.StoreDataList(commandList)
 				c.JSON(handler.ResponseReformer(http.StatusOK, true, "", data))
 			}
 		case "LMEMBERS":

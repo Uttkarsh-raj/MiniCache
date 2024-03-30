@@ -1,4 +1,4 @@
-module github.com/Uttkarsh-raj/redis-go
+module github.com/Uttkarsh-raj/minicache
 
 go 1.20
 
