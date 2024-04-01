@@ -1,22 +1,71 @@
 package handler
 
 import (
+	"bufio"
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/Uttkarsh-raj/minicache/database"
 	"github.com/Uttkarsh-raj/minicache/model"
 )
 
 var (
-	dirPath      = os.Getenv("USERPROFILE") + "/Cache/"
+	dirPath      = os.Getenv("USERPROFILE") + "\\Cache\\"
 	fileNameSet  = "set.txt"
 	fileNameList = "list.txt"
 	filePathSet  = dirPath + fileNameSet
 	filePathList = dirPath + fileNameList
 )
 
+// Initialize
+func Initialize(db *database.Database, newList *model.CommandsList) {
+	if _, err := os.Stat(filePathSet); os.IsNotExist(err) {
+		fmt.Println("Starting a new DB.")
+	} else {
+		InitilizeDB(db)
+		InitializeList(newList)
+	}
+}
+
+func InitilizeDB(db *database.Database) {
+	file, err := os.Open(filePathSet)
+	if err != nil {
+		fmt.Println("Error opening the file")
+	}
+	defer file.Close()
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, " ")
+		var set []string
+		set = append(set, "SET")
+		parts = append(set, parts...)
+		SetRequestHandler(parts, db)
+	}
+}
+
+func InitializeList(newList *model.CommandsList) {
+	file, err := os.Open(filePathList)
+	if err != nil {
+		fmt.Println("Error opening the file")
+	}
+	defer file.Close()
+	commandList := make(map[string]*model.List)
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		parts := strings.Split(line, " ")
+		list := &model.List{}
+		key := parts[0]
+		list.List = parts[1:]
+		commandList[key] = list
+	}
+	newList.Store = commandList
+}
+
 // Store in set.txt
+
 func StoreData(db *database.Database) {
 	if _, err := os.Stat(filePathSet); os.IsNotExist(err) {
 		fmt.Println("File Does Not Exists")

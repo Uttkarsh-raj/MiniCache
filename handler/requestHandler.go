@@ -37,7 +37,7 @@ func GetRequestHandler(request []string, newDb *database.Database) (any, error) 
 		result = append(result, val)
 	}
 	resp := gin.H{
-		"key":   request[1:],
+		"key":   request[1],
 		"value": result,
 	}
 	return resp, nil
@@ -97,9 +97,17 @@ func ListMembers(request []string, newList *model.CommandsList) (any, error) {
 	var response map[string]*model.List
 	if name == "*" {
 		response = newList.Store
+		var res []gin.H
+		for i := range response {
+			k := gin.H{
+				"key":   i,
+				"value": response[i],
+			}
+			res = append(res, k)
+		}
 		resp = gin.H{
 			"key":   request[1],
-			"value": response,
+			"value": res,
 		}
 	}
 	return resp, nil
