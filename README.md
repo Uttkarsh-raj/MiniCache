@@ -100,7 +100,7 @@ go mod tidy
 
 ## Routes
 
-- **GET '/hello'**
+- **GET to test the server : '/hello'**
   * Response as
   ```
   {
@@ -109,7 +109,7 @@ go mod tidy
   }
   ```
 
-- **POST for SET values in db : '/' **
+- **POST to SET values in db : '/'**
   * Request
    ```
    {
@@ -128,7 +128,7 @@ go mod tidy
   }
   ```
 
-- **POST for Get values of a db : '/' **
+- **POST to Get values of a db : '/'**
   * Request
   ```
   {"command":"GET avg"}
@@ -146,7 +146,7 @@ go mod tidy
   "success": true
   }
   ```
-- **POST for push Left on List : '/' **
+- **POST to push Left on List : '/'**
   * Request
    ```
    {
@@ -169,7 +169,7 @@ go mod tidy
   }
   ```
 
-- **POST for push Right on List : '/' **
+- **POST to push Right on List : '/'**
   * Request
   ```
   {
@@ -192,7 +192,7 @@ go mod tidy
   "success": true
   }
   ```
-- **POST for Get member of List : '/' **
+- **POST to Get member of List : '/'**
   * Request
   ```
   {
@@ -215,7 +215,7 @@ go mod tidy
   "success": true
   }
   ```
-- **POST for get ALL elements in List : '/' **
+- **POST to get ALL elements in List : '/'**
   * Request
   ```
   {
